@@ -133,6 +133,7 @@ namespace FlexDataFeeds.Controllers
             {
                 CategoryId = model.CategoryId
             };
+
             model = GetAllCategories(categoryModel);
             return View(model);
         }
