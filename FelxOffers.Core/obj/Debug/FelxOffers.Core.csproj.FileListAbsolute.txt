@@ -1,0 +1,5 @@
+D:\Development\FlexDataFeeds\FelxOffers.Core\bin\Debug\FelxOffers.Core.dll
+D:\Development\FlexDataFeeds\FelxOffers.Core\bin\Debug\FelxOffers.Core.pdb
+D:\Development\FlexDataFeeds\FelxOffers.Core\obj\Debug\FelxOffers.Core.csproj.CoreCompileInputs.cache
+D:\Development\FlexDataFeeds\FelxOffers.Core\obj\Debug\FelxOffers.Core.dll
+D:\Development\FlexDataFeeds\FelxOffers.Core\obj\Debug\FelxOffers.Core.pdb

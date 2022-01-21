@@ -1,0 +1,106 @@
+﻿body {
+}
+
+.row.image-row {
+    border: 1px solid #ccc;
+    padding: 15px 0;
+    margin-top: 15px;
+}
+
+.img-icon img {
+    width: 100%;
+    border: 2px solid #ccc;
+    padding: 2px;
+}
+
+.img-icon {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+    .img-icon a.btn-danger {
+        margin-top: 10px;
+        padding: 2px 20px;
+        height: 20px;
+    }
+
+.image_data {
+    margin-top: 5px;
+}
+
+.row.pg_info {
+    float: right !important;
+    width: 78px;
+}
+
+.img.input-img-icon {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #ccc;
+    border-radius: 49px;
+    margin: 0 8px;
+}
+
+div#search-app {
+    margin-top: 73px;
+}
+
+.img-icon button.btn {
+    margin-top: 6px;
+    padding: 2px 8px;
+}
+
+.row.image-row .width-col-8 {
+    width: 12.45555%;
+}
+
+.pager.pager-inline div {
+    display: inline-block;
+    float: none;
+}
+
+.row.align-row {
+    align-items: center;
+    display: flex;
+}
+
+span.spn_items {
+    padding: 8px;
+}
+
+.row.image-row.no-items {
+    background-color: #f3e3e3;
+    color: #685656;
+}
+
+.row.image-row.no-categoryid {
+    background-color: #d4e7d4;
+}
+
+.h2, h2 {
+    font-size: 30px !important;
+    margin-top: -24px !important;
+}
+
+.button-display-color, .button-display-color:hover {
+    background-color: #d5b7b7;
+    border-color: #d5b7b7;
+    color: white
+}
+
+.update-all-button button {
+    display: inline-block;
+    float: none;
+}
+.update-all-button{
+    align-items:end;
+}
+.k-loading-image {
+    color: #004eff !important;
+}
+
+.img-icon .txt-category {
+    width: 100px;
+    margin-top: 6px;
+    padding: 0px;
+}

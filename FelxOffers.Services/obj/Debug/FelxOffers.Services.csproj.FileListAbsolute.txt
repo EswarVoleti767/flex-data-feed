@@ -1,0 +1,9 @@
+D:\Development\FlexDataFeeds\FelxOffers.Services\bin\Debug\FelxOffers.Services.dll
+D:\Development\FlexDataFeeds\FelxOffers.Services\bin\Debug\FelxOffers.Services.pdb
+D:\Development\FlexDataFeeds\FelxOffers.Services\bin\Debug\FelxOffers.Core.dll
+D:\Development\FlexDataFeeds\FelxOffers.Services\bin\Debug\FelxOffers.Core.pdb
+D:\Development\FlexDataFeeds\FelxOffers.Services\obj\Debug\FelxOffers.Services.csproj.AssemblyReference.cache
+D:\Development\FlexDataFeeds\FelxOffers.Services\obj\Debug\FelxOffers.Services.csproj.CoreCompileInputs.cache
+D:\Development\FlexDataFeeds\FelxOffers.Services\obj\Debug\FelxOffers.Services.csproj.CopyComplete
+D:\Development\FlexDataFeeds\FelxOffers.Services\obj\Debug\FelxOffers.Services.dll
+D:\Development\FlexDataFeeds\FelxOffers.Services\obj\Debug\FelxOffers.Services.pdb

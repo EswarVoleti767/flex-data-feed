@@ -1,0 +1,174 @@
+﻿@using FlexDataFeeds.Models.ManualCategory;
+@model CategoryModel
+@{
+    <script src="~/Content/js/paginga.jquery.js"></script>
+}
+
+<style>
+    .pager div {
+        float: left;
+        border: 1px solid gray;
+        margin: 5px;
+        padding: 10px;
+    }
+
+        .pager div.disabled {
+            opacity: 0.25;
+        }
+
+    .pager .pageNumbers a {
+        display: inline-block;
+        padding: 0 10px;
+        color: gray;
+    }
+
+        .pager .pageNumbers a.active {
+            color: orange;
+        }
+
+    .pager {
+        overflow: hidden;
+    }
+
+    .paginate-no-scroll .items div {
+        height: 250px;
+    }
+</style>
+
+<div id="search-app" class="jumbotron">
+    <header class="mBottom10">
+        <h2>
+            Categorizer Cleaner
+        </h2>
+    </header>
+    @using (Html.BeginForm("List", "ManualCategory", FormMethod.Post, new { id = "form-users" }))
+    {
+        <div class="row align-row">
+
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Category Id</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(model => model.CategoryId, new { @class = "form-control form-control-text number-only", autocomplete = "off", placeholder = "Catalog Id", style = "height: 26px;" })
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search mLeft5"></i> Search</button>
+            </div>
+            @if (Model.ImageList.Count > 0)
+            {
+                <div class="col-sm-4 text-left">
+                    <img src="@Model.DefaultImageUrl" class="img input-img-icon" /><span> <strong>@Model.CategoryName</strong> </span>
+                </div>
+            }
+
+        </div>
+    }
+    @if (Model.ImageList.Count > 0)
+    {
+        <div class="paginate 2">
+            <div class="row image-row items">
+                @foreach (var item in Model.ImageList)
+                {
+                    string imageId = $"{item.NetworkId}_{item.AdvertiserId}_{item.ProductId}";
+                    <div class="col-sm-2 width-col-8">
+                        <div class="img-icon ">
+                            <img src="@item.ImageUrl" />
+                            <button class="btn btn-danger btn-sm markDirty" id="@imageId">
+                                <span>Mark Dirty</span>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="pager pager-inline">
+                <div class="firstPage">&laquo;</div>
+                <div class="previousPage">&lsaquo;</div>
+                <div class="pageNumbers"></div>
+                <div class="nextPage">&rsaquo;</div>
+                <div class="lastPage">&raquo;</div>
+            </div>
+        </div>
+    }
+    @if (Model.CategoryId > 0 && Model.ImageList.Count == 0)
+    {
+        <div class="row image-row no-items">
+            <span class="spn_items">No items found with category id: @Model.CategoryId, please enter valid category id </span>
+        </div>
+    }
+
+</div>
+<div>
+    @Html.HiddenFor(model => model.DirtyImageId)
+</div>
+<div class="k-loading-image" style="display:none;">
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".markDirty").click(function () {
+            var model = {};
+            model.CategoryId = $("#CategoryId").val();
+            model.DirtyImageId = this.id;
+            $("#DirtyImageId").val(this.id);
+            model.CategoryStatus = $("#" + $("#DirtyImageId").val()).hasClass("button-display-color") ? 0 : 3;
+            if ($("#" + $("#DirtyImageId").val()).hasClass("button-display-color")) {
+                if (confirm('Do you want revert this change?')) {
+                    updateMarkDirty();
+                } else {
+                    $("#" + $("#DirtyImageId").val()).blur();
+                    return
+                }
+            }
+            else {
+
+                updateMarkDirty();
+            }
+
+            function updateMarkDirty() {
+                $.ajax({
+                    type: 'POST',
+                    async: true,
+                    url: '/ManualCategory/MarkDirty/',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: '{model: ' + JSON.stringify(model) + '}',
+                    beforeSend: function () { $(".k-loading-image").show(); },
+                    complete: function () { $(".k-loading-image").hide(); },
+                    success: function (data) {
+                        if (data.success) {
+                            if (model.CategoryStatus == 3) {
+                                $("#" + $("#DirtyImageId").val()).addClass('button-display-color');
+                                $("#" + $("#DirtyImageId").val()).blur();
+                            }
+                            else {
+                                $("#" + $("#DirtyImageId").val()).removeClass('button-display-color');
+                                $("#" + $("#DirtyImageId").val()).blur();
+                            }
+
+                        }
+                    },
+                    error: function (data) {
+                        alert("Something went wrong");
+                    }
+                });
+            }
+        });
+    });
+
+    $(function () {
+        $(".paginate").paginga({
+            // use default options
+        });
+
+        $(".paginate-page-2").paginga({
+            page: 2
+        });
+
+        $(".paginate-no-scroll").paginga({
+            scrollToTop: true
+        });
+    });
+</script>

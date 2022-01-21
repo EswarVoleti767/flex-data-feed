@@ -1,0 +1,191 @@
+﻿@using FlexDataFeeds.Models.ManualCategory;
+@model CategoryModel
+@{
+    <script src="~/Content/js/paginga.jquery.min.js"></script>
+}
+
+<style>
+    .pager div {
+        float: left;
+        border: 1px solid gray;
+        margin: 5px;
+        padding: 10px;
+    }
+
+        .pager div.disabled {
+            opacity: 0.25;
+        }
+
+    .pager .pageNumbers a {
+        display: inline-block;
+        padding: 0 10px;
+        color: gray;
+    }
+
+        .pager .pageNumbers a.active {
+            color: orange;
+        }
+
+    .pager {
+        overflow: hidden;
+    }
+
+    .paginate-no-scroll .items div {
+        height: 250px;
+    }
+</style>
+
+<div id="search-app" class="jumbotron">
+    <header class="mBottom10">
+        <h2>
+            Manual/ML Categorizer
+        </h2>
+    </header>
+    @using (Html.BeginForm("ManualCategorizerList", "ManualCategory", FormMethod.Post, new { id = "form-users" }))
+    {
+        <div class="row align-row">
+
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">Category Id</label>
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(model => model.CategoryId, new { @class = "form-control form-control-text number-only", autocomplete = "off", placeholder = "Catalog Id", style = "height: 26px;" })
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-1">
+                <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-search mLeft5"></i> Search</button>
+            </div>
+            @if (Model.ImageList.Count > 0)
+            {
+                <div class="col-sm-4 text-left">
+                    <img src="@Model.DefaultImageUrl" class="img input-img-icon" /><span> <strong>@Model.CategoryName</strong> </span>
+                </div>
+            }
+
+        </div>
+    }
+    @if (Model.ImageList.Count > 0)
+    {
+        <div class="paginate 2">
+            <div class="row image-row items">
+                @foreach (var item in Model.ImageList)
+                {
+                    string imageId = $"{item.NetworkId}_{item.AdvertiserId}_{item.ProductId}";
+                    <div class="col-sm-2">
+                        <div class="img-icon">
+                            <img src="@item.ImageUrl" />
+                            <input type="text" id="newCategory_@imageId" class="txt-category number-only" />
+                            <button class="btn btn-success btn-sm manualUpdate" id="@imageId">
+                                <span>Manual Update</span>
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="pager pager-inline">
+                <div class="firstPage">&laquo;</div>
+                <div class="previousPage">&lsaquo;</div>
+                <div class="pageNumbers"></div>
+                <div class="nextPage">&rsaquo;</div>
+                <div class="lastPage">&raquo;</div>
+            </div>
+            <div class="row update-all-button">
+                <div class="col-sm-4 col-md-offset-8 text-right">
+                    <button class="btn btn-primary btn-sm inferAll1">Infer All</button>
+                </div>
+
+            </div>
+        </div>
+    }
+    @if (Model.CategoryId > 0 && Model.ImageList.Count == 0)
+    {
+        <div class="row image-row no-items">
+            <span class="spn_items">No items found with category id: @Model.CategoryId, please enter valid category id </span>
+        </div>
+    }
+
+</div>
+<div>
+    @Html.HiddenFor(model => model.DirtyImageId)
+</div>
+<div class="k-loading-image" style="display:none;">
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".manualUpdate").click(function () {
+            var model = {};
+            model.DirtyImageId = this.id;
+            $("#DirtyImageId").val(this.id);
+            model.CategoryId = $("#newCategory_" + $("#DirtyImageId").val()).val();
+            model.CategoryStatus = 2;
+            if (model.CategoryId) {
+                $.ajax({
+                    type: 'POST',
+                    async: true,
+                    url: '/ManualCategory/MarkDirty/',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: '{model: ' + JSON.stringify(model) + '}',
+                    beforeSend: function () { $(".k-loading-image").show(); },
+                    complete: function () { $(".k-loading-image").hide(); },
+                    success: function (data) {
+                        if (data.success) {
+                            $("#" + $("#DirtyImageId").val()).attr('disabled', 'disabled');
+                            alert(model.DirtyImageId);
+                        }
+                    },
+                    error: function (data) {
+                        alert("Something went wrong");
+                    }
+                });
+            }
+            else {
+                alert("Please enter CategoryId")
+            }
+
+        });
+
+        $(".inferAll").click(function () {
+            var model = {};
+            model.CategoryId = $("#CategoryId").val();
+            model.DirtyImageId = this.id;
+            $("#DirtyImageId").val(this.id);
+            model.CategoryStatus = 3;
+            $.ajax({
+                type: 'POST',
+                async: true,
+                url: '/ManualCategory/Update/',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                data: '{model: ' + JSON.stringify(model) + '}',
+                beforeSend: function () { $(".k-loading-image").show(); },
+                complete: function () { $(".k-loading-image").hide(); },
+                success: function (data) {
+                    if (data.success) {
+                        $("#" + $("#DirtyImageId").val()).attr('disabled', 'disabled');
+                    }
+                },
+                error: function (data) {
+                    alert("Something went wrong");
+                }
+            });
+        });
+    });
+
+    $(function () {
+        $(".paginate").paginga({
+            // use default options
+        });
+
+        $(".paginate-page-2").paginga({
+            page: 2
+        });
+
+        $(".paginate-no-scroll").paginga({
+            scrollToTop: true
+        });
+    });
+</script>
